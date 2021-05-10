@@ -25,9 +25,8 @@ const uploadImages = async (req, res, next) => {
   console.log("files:", files);
 
   try {
-    const promises = files.map(file => uploadFile(file));
+    const promises = files.map(file => uploadFile(file).then(() => unlinkFile(file.path)));
     const response = await Promise.all(promises);
-    // await unlinkFile(file.path);
     res.send('images uploaded');
   } catch (error) {
     next(error); 
