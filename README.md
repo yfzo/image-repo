@@ -1,0 +1,1 @@
+# Shopify Intern Backend Challenge - Image Repository
