@@ -1,14 +1,19 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+
+const upload = multer({ dest: 'uploads/' });
 
 const {
+  getImage,
   getImages,
-  uploadImages
+  uploadImages,
 } = require("../controllers/images");
 
-/* GET images listing. */
+router.get('/:key', getImage);
+
 router.get('/', getImages);
 
-router.post('/', uploadImages);
+router.post('/', upload.array("images", 50), uploadImages);
 
 module.exports = router;
