@@ -10,7 +10,7 @@ router.get("/login", function (req, res, next) {
   res.send("login");
 });
 
-router.post("/login", passport.authenticate("local", { failureRedirect: '/login' }), loginUser);
+router.post("/login", passport.authenticate("local", { failureRedirect: '/login', successRedirect: '/auth/protected-route' }), loginUser);
 
 router.get("/logout", function (req, res, next) {
   req.logout();
@@ -24,7 +24,6 @@ router.get("/register", function (req, res, next) {
 router.post("/register", registerUser);
 
 router.get('/protected-route', (req, res, next) => {
-  console.log(req.session);
   if (req.isAuthenticated()) {
       res.send('<h1>You are authenticated</h1>');
   } else {
@@ -44,7 +43,7 @@ passport.use(
       db.query(`SELECT * FROM users WHERE email=$1`, [username])
         .then(result => {
           const user = result.rows[0];
-          
+
           if (user == null) {
             return done(null, false);
           } else {
@@ -52,7 +51,7 @@ passport.use(
               if (err) {
                 return done();
               }
-              else if (check) return done(null, [{ email: user.email }]);
+              else if (check) return done(null, { id: user.id });
               else return done(null, false);
             });
           }

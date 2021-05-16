@@ -26,7 +26,7 @@ const uploadFile = (file) => {
   return s3.upload(uploadParams).promise();
 }
 
-const downloadFile = (fileKey) => {
+const retrieveFile = (fileKey) => {
   const downloadParams = {
     Key: fileKey,
     Bucket: bucketName
@@ -35,7 +35,17 @@ const downloadFile = (fileKey) => {
   return s3.getObject(downloadParams).createReadStream();
 }
 
+const retrieveFilePromise = (fileKey) => {
+  const downloadParams = {
+    Key: fileKey,
+    Bucket: bucketName
+  }
+
+  return s3.getObject(downloadParams).promise();
+}
+
 module.exports = {
   uploadFile,
-  downloadFile
+  retrieveFile,
+  retrieveFilePromise
 }
